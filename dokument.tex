@@ -1,0 +1,338 @@
+%╔════════════════════════════╗
+%║	  Szablon dostosował	  ║
+%║	mgr inż. Dawid Kotlarski  ║
+%║		  06.10.2024		  ║
+%╚════════════════════════════╝
+
+
+\documentclass[12pt,twoside,a4paper,openany]{article}
+
+    \input{preambula_pakiety.tex}
+    \input{preambula_ustawienia.tex}
+
+    %polecenia zdefiniowane w pakiecie strona_tytulowa.sty
+    \title{Konfiguracja tunelu GRE typu punkt-punkt w sieci VPN}		%...Wpisać nazwę projektu...
+    \author{Imie Nazwisko}
+    \author{Arkadiusz Ryczek, Maciej Wójs,  }
+    \authorI{Dominik Żuchowicz, Hubert Zięba}
+    \authorII{Szymon Wolski, Filip Wąchała, Jakub \textit{Józef} Tokarczyk}		%jeśli są dwie osoby w projekcie to zostawiamy:    \authorII{}
+		
+	\uczelnia{AKADEMIA NAUK STOSOWANYCH \\W NOWYM SĄCZU}
+    \instytut{Wydział Nauk Inżynieryjnych}
+    \kierunek{Katedra Informatyki}
+    \praca{DOKUMENTACJA PROJEKTOWA}
+    \przedmiot{BEZPIECZEŃSTWO SYSTEMÓW INFORMATYCZNYCH}
+    \prowadzacy{mgr inż. Jacek Kaleta}
+    \rok{2025}
+
+%definicja składni mikrotik
+\usepackage{fancyvrb}
+\DefineVerbatimEnvironment{MT}{Verbatim}%
+{commandchars=\+\[\],fontsize=\small,formatcom=\color{red},frame=lines,baselinestretch=1,} 
+\let\mt\verb
+%zakonczenie definicji składni mikrotik
+
+\usepackage{fancyhdr}    %biblioteka do nagłówka i stopki
+\begin{document}
+
+\renewcommand{\figurename}{Rys.}    %musi byc pod \begin{document}, bo w~tym miejscu pakiet 'babel' narzuca swoje ustawienia
+\renewcommand{\tablename}{Tab.}     %j.w.
+\thispagestyle{empty}               %na tej stronie: brak numeru
+\stronatytulowa                     %strona tytułowa tworzona przez pakiet strona_tytulowa.tex
+
+\input{tabela.tex} % tabela z danymi projektu
+
+\pagestyle{fancy}
+\newpage
+
+%formatowanie spisu treści i~nagłówków
+\renewcommand{\cftbeforesecskip}{8pt}
+\renewcommand{\cftsecafterpnum}{\vskip 8pt}
+\renewcommand{\cftparskip}{3pt}
+\renewcommand{\cfttoctitlefont}{\Large\bfseries\sffamily}
+\renewcommand{\cftsecfont}{\bfseries\sffamily}
+\renewcommand{\cftsubsecfont}{\sffamily}
+\renewcommand{\cftsubsubsecfont}{\sffamily}
+\renewcommand{\cftparafont}{\sffamily}
+%koniec formatowania spisu treści i nagłówków
+
+\tableofcontents    %spis treści
+\thispagestyle{fancy}
+\newpage
+
+%%%%%%%%%%%%%%%%%%% treść główna dokumentu %%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Założenia projektowe – wymagania}
+
+
+\subsection{Cel projektu}
+\begin{itemize}
+    \item Konfiguracja tunelu GRE (Generic Routing Encapsulation) typu punkt-punkt między routerami WEST i EAST.
+    \item Umożliwienie komunikacji między sieciami LAN poprzez sieć publiczną (ISP).
+    \item Wykorzystanie protokołu OSPF do dynamicznego routingu wewnątrz tunelu.
+\end{itemize}
+\subsection{Informacje o projekcie}
+
+
+
+\fg[\linewidth]{rys/tabela.png}{tabela z adresami}{rys-tabela}
+\clearpage
+\fg[\linewidth]{rys/image.png}{schemat logiczny projektu}{rys-tabela}
+
+\clearpage
+\subsection{Wymagania sprzętowe i programowe}
+\begin{itemize}
+    \item \textbf{Routery}: 3 × Cisco 1941 (IOS 15.2(4)M3) – WEST, EAST, ISP.
+    \item \textbf{Przełączniki}: 2 × Cisco 2960 (IOS 15.0(2)).
+    \item \textbf{Komputery}: 2 × PC z systemem Windows (Putty w celu połaczenia sie z terminalem routerów).
+    \item \textbf{Kable}: Konsolowe, Ethernetowe, szeregowe (DCE/DTE).
+\end{itemize}
+
+\subsection{Wymagania sieciowe}
+\begin{itemize}
+    \item Adresacja IP zgodna z tabelą (np. 172.16.1.0/24 dla WEST, 172.16.2.0/24 dla EAST).    \item Domyślne trasy statyczne na routerach WEST i EAST wskazujące na ISP.
+    \item Interfejsy tunelu (Tunnel0) z adresami:\\ 172.16.12.1 (WEST) i 172.16.12.2 (EAST).
+\end{itemize}
+
+\subsection{Bezpieczeństwo}
+\begin{itemize}
+    \item Podstawowe zabezpieczenia routerów (hasła, MOTD, logging synchronous).
+    \item \textbf{Uwaga}: Tunel GRE jest nieszytrowany – w rzeczywistych zastosowaniach należy dodać IPSec.
+\end{itemize}
+
+\section{Wykonanie}
+
+\subsection{Konfiguracja podstawowa}
+\begin{itemize}
+    \item Przypisanie adresów IP interfejsom (G0/1, S0/0/0, S0/0/1).
+    \item Ustawienie domyślnych tras statycznych na WEST i EAST.
+    \item Weryfikacja łączności (ping między routerami a ISP).
+\end{itemize}
+
+\subsection{Konfiguracja tunelu GRE}
+\begin{itemize}    \item Definicja interfejsu \texttt{Tunnel0} na obu routerach:
+    \begin{verbatim}
+interface Tunnel0
+ip address 172.16.12.1 255.255.255.252   # Dla WEST
+tunnel source S0/0/0                      # Lub adres IP
+tunnel destination 10.2.2.1               # Adres EAST
+    \end{verbatim}
+    \item Weryfikacja:
+    \begin{itemize}
+        \item \texttt{show ip interface brief} – sprawdzenie statusu tunelu.
+        \item \texttt{ping 172.16.12.2} (z WEST do EAST) – test łączności.
+    \end{itemize}
+\end{itemize}
+
+\subsection{Konfiguracja OSPF}
+\begin{itemize}
+    \item Dodanie sieci LAN i tunelu do obszaru 0:
+    \begin{verbatim}
+router ospf 1
+network 172.16.1.0 0.0.0.255 area 0      # Dla WEST
+network 172.16.12.0 0.0.0.3 area 0       # Sieć tunelu
+    \end{verbatim}
+    \item Weryfikacja tras: \texttt{show ip route}\\ (powinna pojawić się trasa OSPF do zdalnej sieci LAN).
+\end{itemize}
+
+\subsection{Testy end-to-end}
+\begin{itemize}
+    \item Ping z PC-A (172.16.1.3) do PC-C (172.16.2.3).
+    \item Traceroute – ścieżka powinna przechodzić przez tunel\\ (np. \texttt{172.16.1.1 → 172.16.12.2 → 172.16.2.3}).
+\end{itemize}
+
+\section{Testy i wnioski}
+
+\subsection{Testy}
+
+\fg{Kaleta part 2/WEST/PING Z PCA DO PCC.png}{PING Z PCA DO PCC}{WEST-PING-Z-PCA-DO-PCC}
+\begin{itemize}    \item \textbf{Pozytywne}:
+    \begin{itemize}
+        \item Ping przez tunel między routerami (172.16.12.1 $\leftrightarrow$ 172.16.12.2).
+        \item Komunikacja PC-A $\leftrightarrow$ PC-C (potwierdza działanie OSPF w tunelu).
+    \end{itemize}
+    \item \textbf{Problemy i rozwiązania}:
+    \begin{itemize}        \item Brak łączności: Sprawdź \texttt{tunnel source/destination} oraz czy interfejsy fizyczne są aktywne.
+        \item Błędy OSPF: Upewnij się, że sieci są dodane do właściwego obszaru.
+    \end{itemize}
+\end{itemize}
+
+\subsection{Wnioski}
+\begin{itemize}
+    \item Tunel GRE pozwala na enkapsulację ruchu między odległymi sieciami, ale \textbf{nie szyfruje danych} (wymagany IPSec).
+    \item OSPF dynamicznie aktualizuje trasy, co ułatwia skalowalność\\ (np.\ dodanie nowej sieci LAN wymaga tylko aktualizacji OSPF).
+\end{itemize}
+
+\section{Konfiguracja ISP}
+
+\begin{figure}[h]
+    \centering
+    \begin{minipage}{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Kaleta part 2/ISP/1.png}
+        \caption{Konfiguracja ISP}
+        \label{fig:ISP-1}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Kaleta part 2/ISP/2.png}
+        \caption{Konfiguracja ISP}
+        \label{fig:ISP-2}
+    \end{minipage}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \begin{minipage}{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Kaleta part 2/ISP/3.png}
+        \caption{Konfiguracja ISP}
+        \label{fig:ISP-3}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Kaleta part 2/ISP/4.png}
+        \caption{Konfiguracja ISP}
+        \label{fig:ISP-4}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Kaleta part 2/ISP/5.png}
+    \caption{Konfiguracja ISP}
+    \label{fig:ISP-5}
+\end{figure}
+% \fg{Kaleta part 2/ISP/2.png}{Konfiguracja ISP}{ISP-2}
+
+% \fg{Kaleta part 2/ISP/3.png}{Konfiguracja ISP}{ISP-3}
+% \fg{Kaleta part 2/ISP/4.png}{Konfiguracja ISP}{ISP-4}
+
+% \fg{Kaleta part 2/ISP/5.png}{Konfiguracja ISP}{ISP-5}
+\clearpage
+\section{Dokumentacja EAST I WEST}
+\subsection*{Konfiguracja routera WEST}
+\begin{lstlisting}[caption={Konfiguracja routera WEST}, label={lst:west-config}]
+hostname WEST
+!
+version 15.2(4)M5
+!
+service password-encryption
+no ip domain-lookup
+!
+enable secret cisco
+enable password class
+!
+banner motd #UFO#
+!
+interface GigabitEthernet0/1
+ip address 172.16.1.1 255.255.255.0
+no shutdown
+!
+interface Serial0/0/0
+ip address 10.1.1.1 255.255.255.252
+clock rate 128000
+no shutdown
+!
+interface Tunnel0
+ip address 172.16.12.1 255.255.255.252
+tunnel source Serial0/0/0
+tunnel destination 10.2.2.1
+no shutdown
+!
+router ospf 1
+network 172.16.1.0 0.0.0.255 area 0
+network 172.16.12.0 0.0.0.3 area 0
+!
+ip route 0.0.0.0 0.0.0.0 10.1.1.2
+!
+line con 0
+logging synchronous
+line vty 0 4
+password cisco
+
+\end{lstlisting}
+
+\subsection*{Konfiguracja routera EAST}
+\begin{lstlisting}[caption={Konfiguracja routera EAST}, label={lst:east-config}]
+hostname EAST
+!
+version 15.2
+!
+service password-encryption
+no ip domain-lookup
+!
+enable secret 4 tnhtc92DXBhelxjYk8LWJrPV36S2i4ntXrpb4RFmfqY
+enable password 7 02050D480809
+!
+banner motd ^CEAST^C
+!
+interface GigabitEthernet0/1
+ip address 172.16.2.1 255.255.255.0
+no shutdown
+!
+interface Serial0/0/1
+ip address 10.2.2.1 255.255.255.252
+no shutdown
+!
+interface Tunnel0
+ip address 172.16.12.2 255.255.255.252
+tunnel source 10.2.2.1
+tunnel destination 10.1.1.1
+no shutdown
+!
+router ospf 1
+network 172.16.2.0 0.0.0.255 area 0
+network 172.16.12.0 0.0.0.3 area 0
+!
+ip route 0.0.0.0 0.0.0.0 10.2.2.2
+!
+line con 0
+logging synchronous
+line vty 0 4
+password 7 05080F1C2243
+login
+transport input all
+!
+end
+\end{lstlisting}
+
+\section{Podsumowanie}
+\begin{itemize}
+    \item Projekt umożliwił skonfigurowanie tunelu GRE między dwoma routerami, co pozwoliło na komunikację między sieciami LAN poprzez sieć publiczną.
+    \item Wykorzystanie protokołu OSPF umożliwiło dynamiczne zarządzanie trasami w tunelu.
+    \item Testy potwierdziły poprawność konfiguracji i działanie tunelu GRE.
+    \item Zidentyfikowano, że tunel GRE nie zapewnia szyfrowania danych, co jest istotne w kontekście bezpieczeństwa. W przyszłości zaleca się rozważenie dodania szyfrowania IPSec do tunelu GRE.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%% koniec treść główna dokumentu %%%%%%%%%%%%%%%%%%%%%
+\newpage
+% \addcontentsline{toc}{section}{Literatura}
+% Modified by: Maciej Wójs  
+\printbibliography[heading=bibnumbered, label=Literatura, title=Literatura]
+
+\newpage
+\hypersetup{linkcolor=black}
+\renewcommand{\cftparskip}{3pt}
+\clearpage
+\renewcommand{\cftloftitlefont}{\Large\bfseries\sffamily}
+% \listoffigures
+% \addcontentsline{toc}{section}{Spis rysunków}
+% \thispagestyle{fancy}
+
+% \newpage
+% \renewcommand{\cftlottitlefont}{\Large\bfseries\sffamily}
+% \def\listtablename{Spis tabel}
+% \addcontentsline{toc}{section}{Spis tabel}\listoftables
+% \thispagestyle{fancy}
+
+% \newpage
+% \renewcommand{\cftlottitlefont}{\Large\bfseries\sffamily}
+% \renewcommand{\lstlistlistingname}{Spis listingów}
+% \addcontentsline{toc}{section}{Spis listingów}\lstlistoflistings
+% \thispagestyle{fancy}
+
+%lista rzeczy do zrobienia: wypisuje na koñcu dokumentu, patrz: pakiet todo.sty
+\todos
+%koniec listy rzeczy do zrobienia
+\end{document}
