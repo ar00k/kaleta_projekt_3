@@ -1,0 +1,846 @@
+
+User Access Verification
+
+Username:
+Username:
+Username: admin01
+Password:
+R1>int S0/0/0
+    ^
+% Invalid input detected at '^' marker.
+
+R1>enable
+Password:
+R1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+R1(config)#int s0/0/0
+R1(config-if)#no sh
+R1(config-if)#exit
+R1(config)#
+*Jun  2 16:07:38.987: %LINK-3-UPDOWN: Interface Serial0/0/0, changed state to down
+R1(config)#show interface brief
+             ^
+% Invalid input detected at '^' marker.
+
+R1(config)#exit
+R1#int S0/0/0
+*Jun  2 16:07:51.627: %SYS-5-CONFIG_I: Configured from console by admin01 on console
+R1#show ip interfaces brief
+                    ^
+% Invalid input detected at '^' marker.
+
+R1#show ip interfaces
+                    ^
+% Invalid input detected at '^' marker.
+
+R1#exit
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+R1 con0 is now available
+
+
+
+
+
+Press RETURN to get started.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+User Access Verification
+
+Username:
+Username: admin01
+Password:
+R1>show ip interface
+Embedded-Service-Engine0/0 is administratively down, line protocol is down
+  Internet protocol processing disabled
+GigabitEthernet0/0 is administratively down, line protocol is down
+  Internet protocol processing disabled
+GigabitEthernet0/1 is up, line protocol is up
+  Internet address is 192.168.1.1/24
+  Broadcast address is 255.255.255.255
+  Address determined by setup command
+  MTU is 1500 bytes
+  Helper address is not set
+  Directed broadcast forwarding is disabled
+  Multicast reserved groups joined: 224.0.0.5 224.0.0.6
+  Outgoing access list is not set
+  Inbound  access list is not set
+  Proxy ARP is enabled
+  Local Proxy ARP is disabled
+  Security level is default
+  Split horizon is enabled
+  ICMP redirects are always sent
+  ICMP unreachables are always sent
+  ICMP mask replies are never sent
+  IP fast switching is enabled
+
+R1>show ip interface brief
+Interface                  IP-Address      OK? Method Status                Protocol
+Embedded-Service-Engine0/0 unassigned      YES unset  administratively down down
+GigabitEthernet0/0         unassigned      YES unset  administratively down down
+GigabitEthernet0/1         192.168.1.1     YES manual up                    up
+GigabitEthernet0/2         unassigned      YES unset  administratively down down
+Serial0/0/0                unassigned      YES unset  down                  down
+Serial0/0/1                unassigned      YES unset  administratively down down
+R1>enable
+Password:
+R1#int S0/0/0
+    ^
+% Invalid input detected at '^' marker.
+
+R1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+R1(config)#int S0/0/0
+R1(config-if)#ip add
+R1(config-if)#ip address 10.1.1.1 255.255.255.252
+R1(config-if)#no sh
+R1(config-if)#exit
+R1(config)#show ip interface brief
+             ^
+% Invalid input detected at '^' marker.
+
+R1(config)#exit
+R1#show i
+*Jun  2 16:10:31.019: %SYS-5-CONFIG_I: Configured from console by admin01 on console
+R1#show ip interfa
+R1#show ip interface brief
+Interface                  IP-Address      OK? Method Status                Protocol
+Embedded-Service-Engine0/0 unassigned      YES unset  administratively down down
+GigabitEthernet0/0         unassigned      YES unset  administratively down down
+GigabitEthernet0/1         192.168.1.1     YES manual up                    up
+GigabitEthernet0/2         unassigned      YES unset  administratively down down
+Serial0/0/0                10.1.1.1        YES manual down                  down
+Serial0/0/1                unassigned      YES unset  administratively down down
+R1#int S0/0/0
+    ^
+% Invalid input detected at '^' marker.
+
+R1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+R1(config)#int S0/0/0
+R1(config-if)#clock rate 64000
+R1(config-if)#no sh
+R1(config-if)#exit\
+                  ^
+% Invalid input detected at '^' marker.
+
+R1(config-if)#exit
+R1(config)#exit
+R1#
+*Jun  2 16:11:09.099: %SYS-5-CONFIG_I: Configured from console by admin01 on console
+R1#show ip interface brief
+Interface                  IP-Address      OK? Method Status                Protocol
+Embedded-Service-Engine0/0 unassigned      YES unset  administratively down down
+GigabitEthernet0/0         unassigned      YES unset  administratively down down
+GigabitEthernet0/1         192.168.1.1     YES manual up                    up
+GigabitEthernet0/2         unassigned      YES unset  administratively down down
+Serial0/0/0                10.1.1.1        YES manual down                  down
+Serial0/0/1                unassigned      YES unset  administratively down down
+R1#show ip interface brief
+Interface                  IP-Address      OK? Method Status                Protocol
+Embedded-Service-Engine0/0 unassigned      YES unset  administratively down down
+GigabitEthernet0/0         unassigned      YES unset  administratively down down
+GigabitEthernet0/1         192.168.1.1     YES manual up                    up
+GigabitEthernet0/2         unassigned      YES unset  administratively down down
+Serial0/0/0                10.1.1.1        YES manual down                  down
+Serial0/0/1                unassigned      YES unset  administratively down down
+R1#show ip interface brief
+Interface                  IP-Address      OK? Method Status                Protocol
+Embedded-Service-Engine0/0 unassigned      YES unset  administratively down down
+GigabitEthernet0/0         unassigned      YES unset  administratively down down
+GigabitEthernet0/1         192.168.1.1     YES manual up                    up
+GigabitEthernet0/2         unassigned      YES unset  administratively down down
+Serial0/0/0                10.1.1.1        YES manual down                  down
+Serial0/0/1                unassigned      YES unset  administratively down down
+R1#show ip interface brief
+Interface                  IP-Address      OK? Method Status                Protocol
+Embedded-Service-Engine0/0 unassigned      YES unset  administratively down down
+GigabitEthernet0/0         unassigned      YES unset  administratively down down
+GigabitEthernet0/1         192.168.1.1     YES manual up                    up
+GigabitEthernet0/2         unassigned      YES unset  administratively down down
+Serial0/0/0                10.1.1.1        YES manual down                  down
+Serial0/0/1                unassigned      YES unset  administratively down down
+R1#show ip interface brief
+Interface                  IP-Address      OK? Method Status                Protocol
+Embedded-Service-Engine0/0 unassigned      YES unset  administratively down down
+GigabitEthernet0/0         unassigned      YES unset  administratively down down
+GigabitEthernet0/1         192.168.1.1     YES manual up                    up
+GigabitEthernet0/2         unassigned      YES unset  administratively down down
+Serial0/0/0                10.1.1.1        YES manual down                  down
+Serial0/0/1                unassigned      YES unset  administratively down down
+R1#show ip interface brief
+Interface                  IP-Address      OK? Method Status                Protocol
+Embedded-Service-Engine0/0 unassigned      YES unset  administratively down down
+GigabitEthernet0/0         unassigned      YES unset  administratively down down
+GigabitEthernet0/1         192.168.1.1     YES manual up                    up
+GigabitEthernet0/2         unassigned      YES unset  administratively down down
+Serial0/0/0                10.1.1.1        YES manual down                  down
+Serial0/0/1                unassigned      YES unset  administratively down down
+R1#copy run start
+Destination filename [startup-config]?
+Building configuration...
+[OK]
+R1#
+
+System Bootstrap, Version 15.0(1r)M16, RELEASE SOFTWARE (fc1)
+Technical Support: http://www.cisco.com/techsupport
+Copyright (c) 2012 by cisco Systems, Inc.
+
+Total memory size = 512 MB - On-board = 512 MB, DIMM0 = 0 MB
+CISCO2911/K9 platform with 524288 Kbytes of main memory
+Main memory is configured to 72/-1(On-board/DIMM0) bit mode with ECC enabled
+
+
+Readonly ROMMON initialized
+program load complete, entry point: 0x80803000, size: 0x1b340
+program load complete, entry point: 0x80803000, size: 0x1b340
+
+
+IOS Image Load Test
+___________________
+Digitally Signed Release Software
+program load complete, entry point: 0x81000000, size: 0x5e81be0
+Self decompressing the image : ############################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################### [OK]
+
+Smart Init is enabled
+smart init is sizing iomem
+                 TYPE      MEMORY_REQ
+          HWIC Slot 0      0x00200000
+    Onboard devices &
+         buffer pools      0x0228F000
+-----------------------------------------------
+               TOTAL:      0x0248F000
+
+Rounded IOMEM up to: 40Mb.
+Using 7 percent iomem. [40Mb/512Mb]
+
+              Restricted Rights Legend
+
+Use, duplication, or disclosure by the Government is
+subject to restrictions as set forth in subparagraph
+(c) of the Commercial Computer Software - Restricted
+Rights clause at FAR sec. 52.227-19 and subparagraph
+(c) (1) (ii) of the Rights in Technical Data and Computer
+Software clause at DFARS sec. 252.227-7013.
+
+           cisco Systems, Inc.
+           170 West Tasman Drive
+           San Jose, California 95134-1706
+
+
+
+Cisco IOS Software, C2900 Software (C2900-UNIVERSALK9-M), Version 15.2(4)M5, RELEASE SOFTWARE (fc2)
+Technical Support: http://www.cisco.com/techsupport
+Copyright (c) 1986-2013 by Cisco Systems, Inc.
+Compiled Fri 13-Sep-13 14:59 by prod_rel_team
+
+
+This product contains cryptographic features and is subject to United
+States and local country laws governing import, export, transfer and
+use. Delivery of Cisco cryptographic products does not imply
+third-party authority to import, export, distribute or use encryption.
+Importers, exporters, distributors and users are responsible for
+compliance with U.S. and local country laws. By using this product you
+agree to comply with applicable laws and regulations. If you are unable
+to comply with U.S. and local laws, return this product immediately.
+
+A summary of U.S. laws governing Cisco cryptographic products may be found at:
+http://www.cisco.com/wwl/export/crypto/tool/stqrg.html
+
+If you require further assistance please contact us by sending email to
+export@cisco.com.
+
+Installed image archive
+Cisco CISCO2911/K9 (revision 1.0) with 483328K/40960K bytes of memory.
+Processor board ID FCZ1751613K
+3 Gigabit Ethernet interfaces
+2 Serial(sync/async) interfaces
+1 terminal line
+1 Virtual Private Network (VPN) Module
+DRAM configuration is 64 bits wide with parity enabled.
+255K bytes of non-volatile configuration memory.
+250880K bytes of ATA System CompactFlash 0 (Read/Write)
+
+% Invalid Password length - must contain 10 to 25 characters. Password configuration failed
+
+
+Press RETURN to get started!
+
+
+*Jan  2 00:00:04.711: %IOS_LICENSE_IMAGE_APPLICATION-6-LICENSE_LEVEL: Module name = c2900 Next reboot level = ipbasek9 and License = ipbasek9
+*Jan  2 00:00:04.871: %IOS_LICENSE_IMAGE_APPLICATION-6-LICENSE_LEVEL: Module name = c2900 Next reboot level = securityk9 and License = securityk9
+*Jun  2 16:23:17.635: c3600_scp_set_dstaddr2_idb(184)add = 80 name is Embedded-Service-Engine0/0
+*Jun  2 16:23:39.231: %VPN_HW-6-INFO_LOC: Crypto engine: onboard 0  State changed to: Initialized
+*Jun  2 16:23:39.235:
+
+User Access Verification
+
+Username:  %VPN_HW-6-INFO_LOC: Crypto engine: onboard 0  State changed to: Enabled
+*Jun  2 16:23:40.031: %LINK-3-UPDOWN: Interface GigabitEthernet0/0, changed state to down
+*Jun  2 16:23:40.031: %LINK-3-UPDOWN: Interface GigabitEthernet0/1, changed state to up
+*Jun  2 16:23:40.031: %LINK-3-UPDOWN: Interface GigabitEthernet0/2, changed state to down
+*Jun  2 16:23:40.031: %LINK-3-UPDOWN: Interface Serial0/0/0, changed state to up
+Username: :23:40.031: %LINK-3-UPDOWN: Interface Serial0/0/1, changed state to down
+*Jun  2 16:23:41.127: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0, changed state to down
+*Jun  2 16:23:41.127: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/1, changed state to up
+*Jun  2 16:23:41.127: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/2, changed state to down
+*Jun  2 16:23:41.127: %LINEPROTO-5-UPDOWN: Line protocol on Interface Serial0/0/0, changed state to up
+*Jun  2 16:23:41.127: %LINEPROTO-5-UPDOWN: Line protocol on Interfac
+Username: e Serial0/0/1, changed state to down
+*Jun  2 16:23:42.423: %SYS-5-CONFIG_I: Configured from memory by console
+*Jun  2 16:23:44.423: %LINK-5-CHANGED: Interface Embedded-Service-Engine0/0, changed state to administratively down
+*Jun  2 16:23:44.423: %LINK-5-CHANGED: Interface GigabitEthernet0/0, changed state to administratively down
+*Jun  2 16:23:44.423: %LINK-5-CHANGED: Interface GigabitEthernet0/2, changed state to administratively down
+*Jun  2 16:23:44.423: %LINK-5-CHANGED: Interface Serial0/0/1, ch
+Username: anged state to administratively down
+*Jun  2 16:23:44.991: %SYS-5-RESTART: System restarted --
+Cisco IOS Software, C2900 Software (C2900-UNIVERSALK9-M), Version 15.2(4)M5, RELEASE SOFTWARE (fc2)
+Technical Support: http://www.cisco.com/techsupport
+Copyright (c) 1986-2013 by Cisco Systems, Inc.
+Compiled Fri 13-Sep-13 14:59 by prod_rel_team
+*Jun  2 16:23:45.031: %SNMP-5-COLDSTART: SNMP agent on host R1 is undergoing a cold start
+*Jun  2 16:23:45.651: %SSH-5-ENABLED: SSH 2.0 has been enabled
+*Jun  2 16
+Username: :23:45.651: %LINEPROTO-5-UPDOWN: Line protocol on Interface Embedded-Service-Engine0/0, changed state to down
+*Jun  2 16:23:45.663: %CRYPTO-6-ISAKMP_ON_OFF: ISAKMP is OFF
+*Jun  2 16:23:45.663: %CRYPTO-6-GDOI_ON_OFF: GDOI is OFF
+*Jun  2 16:23:45.663: %CRYPTO-6-ISAKMP_ON_OFF: ISAKMP is OFF
+*Jun  2 16:23:45.663: %CRYPTO-6-GDOI_ON_OFF: GDOI is OFF
+*Jun  2 16:23:52.599: %LINK-3-UPDOWN: Interface Serial0/0/0, changed state to down
+*Jun  2 16:23:53.599: %LINEPROTO-5-UPDOWN: Line protocol on Interface Serial
+Username: 0/0/0, changed state to down
+Username:
+Username:
+Username: admin01
+Password:
+R1>show ip interfaces brief
+                    ^
+% Invalid input detected at '^' marker.
+
+R1>show ip interfaces
+                    ^
+% Invalid input detected at '^' marker.
+
+R1>enable
+Password:
+R1#show ip interfaces brief
+                    ^
+% Invalid input detected at '^' marker.
+
+R1#show ip interfaces
+                    ^
+% Invalid input detected at '^' marker.
+
+R1#show ip interfaces
+                    ^
+% Invalid input detected at '^' marker.
+
+R1#show ip
+% Incomplete command.
+
+R1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+R1(config)#show ip interface brief
+             ^
+% Invalid input detected at '^' marker.
+
+R1(config)#
+*Jun  2 16:25:24.599: %LINK-3-UPDOWN: Interface Serial0/0/0, changed state to up
+*Jun  2 16:25:25.599: %LINEPROTO-5-UPDOWN: Line protocol on Interface Serial0/0/0, changed state to up
+R1(config)#show ip interface brief
+             ^
+% Invalid input detected at '^' marker.
+
+R1(config)#exit
+R1#show ip interfaces
+*Jun  2 16:25:40.115: %SYS-5-CONFIG_I: Configured from console by admin01 on console
+R1#show ip interfaces brief
+                    ^
+% Invalid input detected at '^' marker.
+
+R1#show ?
+  aaa                       Show AAA values
+  access-expression         List access expression
+  access-lists              List access lists
+  adjacency                 Adjacent nodes
+  aliases                   Display alias commands
+  alignment                 Show alignment information
+  appfw                     Application Firewall information
+  archive                   Archive functions
+  arp                       ARP table
+  async                     Information on terminal lines used as router
+                            interfaces
+  authentication            Shows Auth Manager registrations or sessions
+  auto                      Show Automation Template
+  autoupgrade               Show autoupgrade related information
+  backhaul-session-manager  Backhaul Session Manager information
+  backup                    Backup status
+  bcm560x                   BCM560x HW Table
+  beep                      Show BEEP information
+  bfd                       BFD protocol info
+  bgp                       BGP information
+  bridge                    Bridge Forwarding/Filtering Database [verbose]
+  buffers                   Buffer pool statistics
+  calendar                  Display the hardware calendar
+  call                      Show call
+  call-home                 Show command for call home
+  caller                    Display information about dialup connections
+  capability                Capability Information
+  cca                       CCA information
+  cce                       Common Classification Engine (CCE)
+  cdapi                     CDAPI information
+  cdp                       CDP information
+  cef                       CEF address family independent status
+  checkpoint                Checkpoint Facility (CF)
+  cisp                      Shows CISP information
+  class-map                 Show CPL Class Map
+  clns                      CLNS network information
+  clock                     Display the system clock
+  cls                       DLC user information
+  cns                       CNS agents
+  compress                  Show compression statistics
+  configuration             Contents of Non-Volatile memory
+  connection                Show Connection
+  content-scan              Shows content-scan information
+  context                   Show context information about recent crash(s)
+  control-plane             Control Plane information
+  controllers               Interface controller status
+  cops                      COPS information
+  credentials               Show credentials service configuration
+  crm                       Carrier Resource Manager info
+  crypto                    Encryption module
+  csdb                      Show CSDB Information
+  cts                       Cisco Trusted Security information
+  cwmp                      Show CPE WAN Management Protocol(cwmp) information
+  dampening                 Display dampening information
+  data-corruption           Show data errors
+  database                  Show Database
+  debugging                 State of each debugging option
+  derived-config            Derived operating configuration
+  dhcp                      Dynamic Host Configuration Protocol status
+  diag                      Show diagnostic information for port
+                            adapters/modules
+  dialer                    Dialer parameters and statistics
+  dlsw                      Data Link Switching information
+  dmvpn                     Display DMVPN session related information
+  dnsix                     Shows Dnsix/DMDP information
+  dot1q-tunnel              Display dot1q tunnel ports
+  dot1x                     Dot1x information
+  dspfarm                   Display DSPFARM related information
+  dtp                       DTP information
+  eap                       Shows EAP registration/session information
+  ecfmpal                   Show ECFM Commands
+  eigrp                     EIGRP show commands
+  energywise                EnergyWise show commands
+  entry                     Queued terminal entries
+  environment               Environmental monitor statistics
+  eou                       EAPoUDP
+  epm                       EPM information
+  errdisable                Error disable
+  eswilp                    Marvel ATU & VTU table dump
+  etherchannel              EtherChannel information
+  ethernet                  Ethernet parameters
+  event                     Embedded event related commands
+  event-manager             Event manager information
+  exception                 exception information
+  fastblk                   fastblk memory information
+  fhrp                      FHRP information
+  file                      Show filesystem information
+  flash0:                   display information about flash0: file system
+  flash1:                   display information about flash1: file system
+  flash:                    display information about flash: file system
+  flow                      Flow information
+  flow-sampler              Display the flow samplers configured
+  format                    Show format information
+  frame-relay               Frame-Relay information
+  funi                      FUNI information
+  glbp                      GLBP information
+  hardware                  Hardware specific information
+  history                   Display the session command history
+  hosts                     IP domain-name, lookup style, nameservers, and host
+                            table
+  html                      HTML helper commands
+  idb                       List of Interface Descriptor Blocks
+  identity                  Identity profiles and policies
+  idmgr                     IDMGR interaction
+  if-mgr                    if-mgr information
+  interfaces                Interface status and configuration
+  inventory                 Show the physical inventory
+  ip                        IP information
+  ipam                      IP Addr Mgr (IPAM) information
+  ipc                       Interprocess communications commands
+  iphc-profile              Show IPHC Profile
+  ipv6                      IPv6 information
+  isis                      IS-IS routing information
+  iua                       ISDN User Adaptation Layer information
+  kerberos                  Show Kerberos Values
+  key                       Key information
+  keystore                  Show keystore information
+  kron                      Kron Subsystem
+  l2protocol-tunnel         Display L2PT status and configurations
+  l4f                       L4F details
+  license                   Show license information
+  line                      TTY line information
+  llc2                      IBM LLC2 circuit information
+  lldp                      LLDP information
+  location                  Display the system location
+  logging                   Show the contents of logging buffers
+  login                     Display Secure Login Configurations and State
+  mab                       MAB information
+  mac-address-table         MAC forwarding table
+  macdb                     show MAC database
+  management                Display the management applications
+  management-interface      Host management-interface information
+  mdf                       Show the names of configured EMM menus
+  memory                    Memory statistics
+  mfib                      MFIB address family independent status
+  microcode                 show configured microcode for downloadable hardware
+  mls                       Show MultiLayer Switching information
+  modem-pool                Display modem pool information
+  modemcap                  Show Modem Capabilities database
+  monitor                   Monitoring different system events
+  mtm                       MTM
+  nbf                       NBF (NetBEUI) information
+  netbios-cache             NetBIOS name cache contents
+  netconf                   Show NETCONF information
+  network-clocks            Network clocks information
+  nhrp                      Display NHRP related information
+  ntp                       Network time protocol
+  object-group              List object groups
+  odm-format                Show the schema used for ODM input file
+  ospfv3                    OSPFv3 information
+  pagp                      Port channel information
+  parameter-map             parameter map information
+  parser                    Display parser information
+  pas                       Port Adaptor Information
+  pci                       PCI Information
+  persistent                Show persistent information
+  platform                  Displays platform information
+  pm                        Show Port Manager commands
+  policy-firewall           Show policy-firewall
+  policy-manager            Policy Manager
+  policy-map                Show Policy Map
+  ppp                       PPP parameters and statistics
+  pppatm                    PPP over ATM
+  pppoe                     PPPoE information
+  printers                  Show LPD printer information
+  privilege                 Show current privilege level
+  processes                 Active process statistics
+  protocols                 Active network routing protocols
+  qdm                       Show information about QoS Device Manager
+  radius                    Shows radius information
+  redundancy                Redundancy Facility (RF) information
+  region                    Region Manager Status
+  registry                  Function registry information
+  reload                    Scheduled reload information
+  resource                  Display Resource Usage/Relations and more details
+  rhosts                    Remote-host+user equivalences
+  rib                       Routing Information Base
+  rif                       RIF cache entries
+  rmon                      rmon statistics
+  rom-monitor               show ROMMON region information
+  route-map                 route-map information
+  route-tag                 route-tag information
+  rudpv1                    Rudpv1 information
+  running-config            Current operating configuration
+  sampler                   Sampler information
+  sasl                      show SASL information
+  scp                       SCP commands
+  sctp                      SCTP information
+  sdllc                     Display sdlc - llc2 conversion information
+  secure                    Show secure image and configuration archive
+  service-routing           Service-Routing show commands
+  sessions                  Information about Telnet connections
+  sgbp                      SGBP group information
+  smds                      SMDS information
+  smf                       Software MAC filter
+  snap                      Show information on SNAP server
+  snapshot                  Snapshot parameters and statistics
+  snmp                      snmp statistics
+  sntp                      Simple network time protocol
+  sockets                   Socket Details
+  software                  List software information
+  source-bridge             Source-bridge parameters and statistics
+  spanning-tree             Spanning tree topology
+  ssh                       Status of SSH server connections
+  ssm                       Segment Switching Manager Status
+  stacks                    Process stack utilization
+  standby                   Hot Standby Router Protocol (HSRP) information
+  startup-config            Contents of startup configuration
+  storm-control             Show packet storm control configuration
+  subscriber                Subscriber Service Switch Information
+  subscriber-policy         Subscriber policy
+  subsys                    Show subsystem information
+  table-map                 Show Table Map
+  tacacs                    Shows tacacs+ server statistics
+  tarp                      TARP information
+  tcp                       Status of TCP connections
+  tdm                       TDM connection information
+  tech-support              Show system information for Tech-Support
+  template                  Template information
+  terminal                  Display terminal configuration parameters
+  test_rib_access           RIB_ACCESS TEST info
+  time-range                Time range
+  topology                  Topology instance information
+  track                     Tracking information
+  translate                 Protocol translation information
+  trunk                     Trunk Group info
+  tunnel                    Show configured tunnels
+  ucse                      UCSE
+  udp                       UDP Details
+  usb                       USB Interface
+  user-group                Display User Group information
+  users                     Display information about terminal lines
+  vc-group                  Show VC Group
+  version                   System hardware and software status
+  vlan-range                VLAN Range
+  vlan-switch               VTP VLAN status
+  vlans                     Virtual LANs Information
+  vpdn                      VPDN information
+  vrf                       VPN Routing/Forwarding instance information
+  vrrp                      VRRP information
+  vstack                    Vstack show commands
+  vtemplate                 Virtual Template interface information
+  vtp                       VTP information
+  waas                      IOS Wide Area Application Services
+  warm-reboot               Show Warm Reboot related information
+  wccp                      WCCP information
+  webvpn                    WebVPN information
+  whoami                    Info on current tty line
+  wrr-queue                 WRR queue
+  wsma                      Show Web Services Management Agents information
+  x25                       X.25 information
+  x28                       X.28 rotary information
+  x29                       X.29 information
+  xos                       Cross-OS Library Information and Traces
+  xsd-format                Show the ODM XSD for the command
+  zone                      Zone Information
+  zone-pair                 Zone pair information
+
+R1#show ip ?
+  access-lists            List IP access lists
+  accounting              The active IP accounting database
+  admission               Network Admission Control information
+  aliases                 IP alias table
+  arp                     IP ARP table
+  as-path-access-list     List AS path access lists
+  auth-proxy              Authentication Proxy information
+  bgp                     BGP information
+  cache                   IP fast-switching route cache
+  cef                     Cisco Express Forwarding
+  community-list          List community-list
+  ddns                    Dynamic DNS
+  device                  Show IP Tracking Hosts
+  dhcp                    Show items in the DHCP database
+  dns                     Show DNS information
+  dns-cache               Show addresses in DNS cache
+  drp                     Director response protocol
+  eigrp                   Show IPv4 EIGRP
+  extcommunity-list       List extended-community list
+  flow                    NetFlow switching
+  helper-address          helper-address table
+  host-list               Host list
+  http                    HTTP information
+  icmp                    ICMP information
+  igmp                    IGMP information
+  inspect                 CBAC (Context Based Access Control) information
+  interface               IP interface status and configuration
+  ips                     IPS (Intrusion Prevention System) information
+  irdp                    ICMP Router Discovery Protocol
+  local                   IP local options
+  masks                   Masks associated with a network
+  mfib                    IP multicast forwarding information base
+  mrib                    Multicast Routing Information Base
+  mrm                     IP Multicast Routing Monitor information
+  mroute                  IP multicast routing table
+  msdp                    Multicast Source Discovery Protocol (MSDP)
+  multicast               Multicast global information
+  mux                     Show ip multiplex statistics
+  nat                     IP NAT information
+  nbar                    Network-Based Application Recognition
+  nhrp                    NHRP information
+  ospf                    OSPF information
+  pgm                     PGM Reliable Transport Protocol
+  pim                     PIM information
+  policy                  Policy routing
+
+R1#show ip intr
+R1#show ip inter
+R1#show ip interface brief
+Interface                  IP-Address      OK? Method Status                Protocol
+Embedded-Service-Engine0/0 unassigned      YES NVRAM  administratively down down
+GigabitEthernet0/0         unassigned      YES NVRAM  administratively down down
+GigabitEthernet0/1         192.168.1.1     YES NVRAM  up                    up
+GigabitEthernet0/2         unassigned      YES NVRAM  administratively down down
+Serial0/0/0                10.1.1.1        YES NVRAM  up                    up
+Serial0/0/1                unassigned      YES NVRAM  administratively down down
+R1#
+*Jun  2 16:26:43.659: %OSPF-5-ADJCHG: Process 101, Nbr 10.2.2.2 on Serial0/0/0 from LOADING to FULL, Loading Done
+R1# show run
+Building configuration...
+
+Current configuration : 1641 bytes
+!
+! Last configuration change at 16:25:40 UTC Mon Jun 2 2025 by admin01
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+security passwords min-length 10
+enable secret 4 3mxoP2KRPf3sFHYl6Vm6.ssJJi9tOJqqb6DMG/YH5No
+!
+no aaa new-model
+!
+ip cef
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+ip domain name ccnasecurity.com
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+license udi pid CISCO2911/K9 sn FCZ1751613K
+!
+!
+username admin01 secret 4 HpRTAoIz4NG65n2elZV/STDnkraB6fv8Zjcbg7kduTs
+!
+redundancy
+!
+!
+!
+!
+!
+ip ssh version 2
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Embedded-Service-Engine0/0
+ no ip address
+ shutdown
+!
+interface GigabitEthernet0/0
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/1
+ ip address 192.168.1.1 255.255.255.0
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/2
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface Serial0/0/0
+ ip address 10.1.1.1 255.255.255.252
+ clock rate 64000
+!
+interface Serial0/0/1
+ no ip address
+ shutdown
+ clock rate 2000000
+!
+router ospf 101
+ network 10.1.1.0 0.0.0.3 area 0
+ network 192.168.1.0 0.0.0.255 area 0
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+control-plane
+!
+!
+!
+line con 0
+ exec-timeout 5 0
+ logging synchronous
+ login local
+line aux 0
+line 2
+ no activation-character
+ no exec
+ transport preferred none
+ transport output pad telnet rlogin lapb-ta mop udptn v120 ssh
+ stopbits 1
+line vty 0 4
+ exec-timeout 5 0
+ login local
+ transport input ssh
+!
+scheduler allocate 20000 1000
+!
+end
