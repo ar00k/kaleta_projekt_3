@@ -11,7 +11,7 @@
     \input{preambula_ustawienia.tex}
 
     %polecenia zdefiniowane w pakiecie strona_tytulowa.sty
-    \title{Zmienić tytuł [IMPORTANT]}		%...Wpisać nazwę projektu...
+    \title{Konfiguracja Site-to-Site VPN w Cisco IOS}		%...Wpisać nazwę projektu...
     \author{Imie Nazwisko}
     \author{Arkadiusz Ryczek, Maciej Wójs,  }
     \authorI{Dominik Żuchowicz, Hubert Zięba}
@@ -25,6 +25,32 @@
     \prowadzacy{mgr inż. Jacek Kaleta}
     \rok{2025}
 
+    \definecolor{codegreen}{rgb}{0,0.6,0}
+    \definecolor{codegray}{rgb}{0.5,0.5,0.5}
+    \definecolor{codepurple}{rgb}{0.58,0,0.82}
+    \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+    \lstdefinestyle{mystyle}{
+        backgroundcolor=\color{backcolour},   
+        commentstyle=\color{codegreen},
+        keywordstyle=\color{magenta},
+        numberstyle=\tiny\color{codegray},
+        stringstyle=\color{codepurple},
+        basicstyle=\ttfamily\footnotesize,
+        breakatwhitespace=false,         
+        breaklines=true,                 
+        captionpos=b,                    
+        keepspaces=true,                 
+        numbers=left,                    
+        numbersep=5pt,                  
+        showspaces=false,                
+        showstringspaces=false,
+        showtabs=false,                  
+        tabsize=2,
+        morecomment=[l]{!}
+    }
+
+    \lstset{style=mystyle}
 %definicja składni mikrotik
 \usepackage{fancyvrb}
 \DefineVerbatimEnvironment{MT}{Verbatim}%
@@ -61,6 +87,211 @@
 \newpage
 
 %%%%%%%%%%%%%%%%%%% treść główna dokumentu %%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Założenia projektowe – wymagania}
+\section{Wymagania projektu}
+\begin{itemize}
+\item \textbf{Topologia:} Dwa oddzielne lokacje (Site A i Site B) połączone przez publiczną sieć ISP
+\item \textbf{Urządzenia:} Dwa routery Cisco (R1 i R3) pełniące rolę bram VPN
+\item \textbf{Wymagania bezpieczeństwa:}
+  \begin{itemize}
+  \item Szyfrowanie ruchu między lokacjami
+  \item Uwierzytelnianie urządzeń
+  \item Integralność przesyłanych danych
+  \end{itemize}
+\item \textbf{Wymagania funkcjonalne:}
+  \begin{itemize}
+  \item Tunel IPSec między R1 (10.1.1.1) i R3 (10.2.2.1)
+  \item Komunikacja między sieciami LAN (192.168.1.0/24 i 192.168.3.0/24)
+  \item Wykorzystanie pre-shared key do uwierzytelniania
+  \end{itemize}
+\end{itemize}
 
+\section{Topologia sieci}
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.8\textwidth]{rys/Screenshot From 2025-06-09 18-29-04.png}
+\caption{Topologia połączenia VPN między Site A i Site B}
+\label{fig:vpn_topology}
+\end{figure}
+\textbf{Uwaga:} Router R2 pełni rolę symulowanego dostawcy internetowego (ISP) i nie uczestniczy w konfiguracji VPN.
+
+\section{Tabela adresacji IP}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.95\textwidth]{rys/adresy.png}
+    \caption{Tabela adresacji IP dla urządzeń w projekcie}
+    \label{fig:adresacja_ip}
+\end{figure}
+
+\section{Konfiguracja routera R1}
+\begin{lstlisting}[caption={Konfiguracja podstawowa i VPN na R1}]
+! Konfiguracja interfejsów
+! Przypisanie adresu IP do interfejsu GigabitEthernet0/1 (sieć LAN Site A)
+interface GigabitEthernet0/1
+ ip address 192.168.1.1 255.255.255.0
+ no shutdown! Aktywacja interfejsu
+!
+! Przypisanie adresu IP do interfejsu Serial0/0/0 (połączenie z ISP)
+interface Serial0/0/0
+ ip address 10.1.1.1 255.255.255.252
+ no shutdown! Aktywacja interfejsu
+
+! Routing statyczny
+! Definicja trasy domyślnej kierującej ruch do ISP
+ip route 0.0.0.0 0.0.0.0 10.1.1.2
+
+! Konfiguracja ISAKMP (IKE Phase 1)
+! Definicja polityki ISAKMP (Internet Security Association and Key Management Protocol)
+crypto isakmp policy 10
+ encr 3des            !Użycie szyfrowania 3DES
+ hash md5             !Użycie funkcji skrótu MD5
+ authentication pre-share !Metoda uwierzytelniania: pre-shared key
+ group 2              !Grupa Diffie-Hellmana (DH) numer 2 (1024-bit)
+! Definicja klucza pre-shared dla zdalnego routera (R3)
+crypto isakmp key cisco123 address 10.2.2.1
+
+! Konfiguracja transform set (IKE Phase 2)
+! Definicja zestawu transformacji określającego, jak dane będą chronione
+crypto ipsec transform-set MYSET esp-3des esp-md5-hmac
+! esp-3des: Szyfrowanie ESP (Encapsulating Security Payload) za pomocą 3DES
+! esp-md5-hmac: Uwierzytelnianie ESP za pomocą HMAC-MD5
+
+! Definicja listy dostępu dla ruchu VPN
+! Określenie, który ruch sieciowy ma być szyfrowany (z LAN Site A do LAN Site B)
+ip access-list extended VPN-TRAFFIC
+ permit ip 192.168.1.0 0.0.0.255 192.168.3.0 0.0.0.255
+
+! Tworzenie i aplikacja mapy kryptograficznej
+! Powiązanie wszystkich elementów konfiguracji VPN w jedną całość
+crypto map MYMAP 10 ipsec-isakmp
+ set peer 10.2.2.1            !Adres IP zdalnego routera VPN (R3)
+ set transform-set MYSET      !Użycie zdefiniowanego zestawu transformacji
+ match address VPN-TRAFFIC    !Powiązanie z listą dostępu definiującą ruch VPN
+
+! Aplikacja mapy kryptograficznej do interfejsu wychodzącego (w kierunku ISP)
+interface Serial0/0/0
+ crypto map MYMAP
+\end{lstlisting}
+
+\section{Konfiguracja routera R3}
+\begin{lstlisting}[caption={Konfiguracja podstawowa i VPN na R3}]
+! Konfiguracja interfejsów
+! Przypisanie adresu IP do interfejsu GigabitEthernet0/1 (sieć LAN Site B)
+interface GigabitEthernet0/1
+ ip address 192.168.3.1 255.255.255.0
+ no shutdown! Aktywacja interfejsu
+!
+! Przypisanie adresu IP do interfejsu Serial0/0/1 (połączenie z ISP)
+interface Serial0/0/1
+ ip address 10.2.2.1 255.255.255.252
+ no shutdown! Aktywacja interfejsu
+
+! Routing statyczny
+! Definicja trasy domyślnej kierującej ruch do ISP
+ip route 0.0.0.0 0.0.0.0 10.2.2.2
+
+! Konfiguracja ISAKMP (IKE Phase 1)
+! Definicja polityki ISAKMP, musi być zgodna z konfiguracją na R1
+crypto isakmp policy 10
+ encr 3des
+ hash md5
+ authentication pre-share
+ group 2
+! Definicja klucza pre-shared dla zdalnego routera (R1)
+crypto isakmp key cisco123 address 10.1.1.1
+
+! Konfiguracja transform set (IKE Phase 2)
+! Definicja zestawu transformacji, musi być zgodna z konfiguracją na R1
+crypto ipsec transform-set MYSET esp-3des esp-md5-hmac
+
+! Definicja listy dostępu dla ruchu VPN
+! Określenie, który ruch sieciowy ma być szyfrowany (z LAN Site B do LAN Site A)
+ip access-list extended VPN-TRAFFIC
+ permit ip 192.168.3.0 0.0.0.255 192.168.1.0 0.0.0.255
+
+! Tworzenie i aplikacja mapy kryptograficznej
+! Powiązanie wszystkich elementów konfiguracji VPN w jedną całość
+crypto map MYMAP 10 ipsec-isakmp
+ set peer 10.1.1.1            !Adres IP zdalnego routera VPN (R1)
+ set transform-set MYSET      !Użycie zdefiniowanego zestawu transformacji
+ match address VPN-TRAFFIC    !Powiązanie z listą dostępu definiującą ruch VPN
+
+! Aplikacja mapy kryptograficznej do interfejsu wychodzącego (w kierunku ISP)
+interface Serial0/0/1
+ crypto map MYMAP
+\end{lstlisting}
+
+% \section{Weryfikacja działania VPN}
+% \subsection{Polecenia weryfikacyjne}
+% \begin{lstlisting}
+% show crypto isakmp sa      # Wyświetla status skojarzeń bezpieczeństwa IKE (Phase 1)
+% show crypto ipsec sa       # Wyświetla status tuneli IPSec (Phase 2) i statystyki ruchu
+% ping 192.168.3.10 source 192.168.1.10  # Testuje połączenie end-to-end przez tunel VPN
+%                                        # (przy założeniu, że hosty istnieją w obu sieciach)
+% \end{lstlisting}
+
+% \subsection{Oczekiwane wyniki}
+% \begin{itemize}
+% \item Status IKE: \texttt{QM\_IDLE} oznacza poprawnie nawiązane sąsiedztwo
+% \item Status IPSec: \texttt{\#pkts encaps/decaps} pokazuje przepływ ruchu
+% \item Udany ping między sieciami lokalnymi
+% \end{itemize}
+
+% \section{Opis kluczowych parametrów}
+% \begin{tabularx}{\textwidth}{lX} % Usunięto pionowe linie
+% \toprule % Zamiast \hline
+% \textbf{Parametr} & \textbf{Znaczenie} \\
+% \midrule % Zamiast \hline
+% ISAKMP Policy 10 & Definicja parametrów IKE Phase 1 \\
+% esp-3des & Szyfrowanie 3DES (168-bit) \\
+% esp-md5-hmac & Algorytm integralności MD5 \\
+% pre-share & Uwierzytelnianie za pomocą wspólnego klucza \\
+% group 2 & Grupa Diffie-Hellman 1024-bit \\
+% crypto map & Mapowanie polityk bezpieczeństwa na interfejs \\
+% match address & Powiązanie ACL z mapą kryptograficzną \\
+% \bottomrule % Zamiast \hline
+% \end{tabularx}
+\clearpage
+\section{Zrzuty ekranu}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.75\textwidth]{routery/R1/ping1.png}
+    \caption{Ping z R1 cz.1}
+    \label{fig:adresacja_ip}
+\end{figure}
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.75\textwidth]{routery/R1/ping2.png}
+    \caption{Ping z R1 cz.2}
+    \label{fig:adresacja_ip}
+\end{figure}
+
+\begin{figure}[ht!]
+    \centering
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{routery/R2/R2.png}
+        \caption{Pingi do R2 oraz interfejsy}
+        \label{fig:r2_ping}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{routery/R3/Zrzut ekranu 2025-06-02 194011.png}
+        \caption{Pingi z R3 oraz interfejsy}
+        \label{fig:r3_ping}
+    \end{minipage}
+\end{figure}
+\clearpage
+\section{Podsumowanie}
+Konfiguracja Site-to-Site VPN obejmuje:
+\begin{enumerate}
+\item Konfigurację podstawową routerów (adresacja, routing)
+\item Definicję polityki ISAKMP (IKE Phase 1)
+\item Konfigurację transformacji IPSec (IKE Phase 2)
+\item Tworzenie list dostępu identyfikujących ruch VPN
+\item Budowę i aplikację map kryptograficznych
+\end{enumerate}
+Poprawnie skonfigurowany tunel VPN zapewnia bezpieczną komunikację między sieciami lokalnymi poprzez nieszyfrowaną sieć publiczną.
 \end{document}
